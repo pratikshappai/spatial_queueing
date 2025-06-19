@@ -66,7 +66,7 @@ def computing_spatial_functions(dir_name):
     x_fit = np.linspace(min(x_data), max(x_data), 100)
     y_fit = power_law(x_fit, a, b)
 
-    plt.scatter([50 + 100 * i for i in range(19)], list_mean_pickup_min, linestyle='None', marker='^')
+    plt.scatter([50 + 100 * i for i in range(19)], list_mean_pickup_min, marker='^')
     plt.plot(x_fit, y_fit, 'r-', label='Fit: {:.2f} * x^({:.2f})'.format(a, b))
     plt.xlabel("n_available_cars")
     plt.ylabel("pickup_time_min")
@@ -132,7 +132,7 @@ def computing_spatial_functions(dir_name):
     x_fit = np.linspace(min(x_data), max(x_data), 100)
     y_fit = power_law(x_fit, a, b)
 
-    plt.scatter([25 + 50 * i for i in range(18)], list_mean_charger_min, linestyle='None', marker='^')
+    plt.scatter([25 + 50 * i for i in range(18)], list_mean_charger_min, marker='^')
     plt.plot(x_fit, y_fit, 'r-', label='Fit: {:.2f} * x^({:.2f})'.format(a, b))
     plt.xlabel("n_available_chargers")
     plt.ylabel("drive_to_charger_time_min")

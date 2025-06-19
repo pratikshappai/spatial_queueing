@@ -51,7 +51,7 @@ def run_simulation(
     start_time = time.time()
     env = simpy.Environment()
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    home_dir = os.path.join(current_dir, "spatial_queueing")
+    home_dir = current_dir
     if uniform_locations is not None:
         DatasetParams.uniform_locations = uniform_locations
     if perc_trip_filter is not None:

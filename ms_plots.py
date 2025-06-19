@@ -4,9 +4,8 @@ import os
 
 
 def fleet_can_pod(data_type):
-    plot_dir = ("/Users/sushilvarma/Library/Mobile Documents/com~apple~CloudDocs/" +
-                "Academics/Research/EV/MS_Second_Round_Plots_Final/final_plots"
-                )
+    plot_dir = os.path.join(os.getcwd(), "final_plots")
+    os.makedirs(plot_dir, exist_ok=True)
     if data_type == "Chicago Dataset":
         cust_per_min = [21.2, 31.8, 42.3, 52.9, 63.5]
         tesla_po2_45_min = [865, 1256, 1738, 2166, 2586]
@@ -48,9 +47,8 @@ def fleet_can_pod(data_type):
 
 
 def load_balancing(ev_type, plot_type):
-    plot_dir = ("/Users/sushilvarma/Library/Mobile Documents/com~apple~CloudDocs/" +
-                "Academics/Research/EV/MS_Second_Round_Plots_Final/final_plots"
-                )
+    plot_dir = os.path.join(os.getcwd(), "final_plots")
+    os.makedirs(plot_dir, exist_ok=True)
     if ev_type == "nissan" and plot_type == "workload":
         d = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         t_30_min = np.array([0.786, 0.854, 0.872, 0.886, 0.895, 0.899, 0.900, 0.900, 0.901, 0.901]) * 100
