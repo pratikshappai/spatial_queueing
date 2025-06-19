@@ -70,7 +70,9 @@ class SuperCharger:
             # time out inside car_charging function only affects the function itself
             # occupancy increases at the same time charging happens
             if car.state != CarState.WAITING_FOR_CHARGER.value:
-                raise ValueError(f"Car {self.id} is not at the charger to be charged")
+                raise ValueError(
+                    f"Car {car.id} is not at the charger to be charged"
+                )
             car.prev_charging_process = self.env.process(car.car_charging(self.idx, self.queue_list[0][1]))
             # Increase the occupancy of the charger by one
             self.occupancy += 1
