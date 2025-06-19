@@ -1,7 +1,6 @@
 import numpy as np
 from haversine import haversine, haversine_vector, Unit
 from sim_metadata import SimMetaData, DatasetParams, DistFunc
-import itertools
 
 
 def calc_dist_between_two_points(start_lat, start_lon, end_lat, end_lon, dist_func, dist_correction_factor=1):
@@ -17,7 +16,7 @@ def calc_dist_between_two_points(start_lat, start_lon, end_lat, end_lon, dist_fu
             end_lat_list = np.ones(len(start_lat)) * end_lat
             end_lon_list = np.ones(len(start_lon)) * end_lon
         else:
-            raise ValueError("The number of start locations and end locations do not match.")
+            raise ValueError("Invalid distance function")
         if dist_func == DistFunc.HAVERSINE.value:
             start = list(zip(start_lat_list, start_lon_list))
             end = list(zip(end_lat_list, end_lon_list))
@@ -29,7 +28,7 @@ def calc_dist_between_two_points(start_lat, start_lon, end_lat, end_lon, dist_fu
             end2 = list(zip(end_lat_list, start_lon_list))
             distance = haversine_vector(start1, end1, unit=Unit.MILES) + haversine_vector(start2, end2, unit=Unit.MILES)
         else:
-            raise ValueError("The number of start locations and end locations do not match.")
+            raise ValueError("Invalid distance function")
     else:
         if np.array(start_lat).size == 1:
             if dist_func == DistFunc.HAVERSINE.value:
@@ -43,7 +42,7 @@ def calc_dist_between_two_points(start_lat, start_lon, end_lat, end_lon, dist_fu
                 end2 = (end_lat, start_lon)
                 distance = haversine(start1, end1, unit=Unit.MILES) + haversine(start2, end2, unit=Unit.MILES)
             else:
-                raise ValueError("The number of start locations and end locations do not match.")
+                raise ValueError("Invalid distance function")
         else:
             if dist_func == DistFunc.HAVERSINE.value:
                 start = list(zip(start_lat, start_lon))
@@ -59,7 +58,7 @@ def calc_dist_between_two_points(start_lat, start_lon, end_lat, end_lon, dist_fu
                         + haversine_vector(start2, end2, unit=Unit.MILES)
                 )
             else:
-                raise ValueError("The number of start locations and end locations do not match.")
+                raise ValueError("Invalid distance function")
     return dist_correction_factor * distance
 
 
