@@ -1,5 +1,5 @@
 from main import run_simulation
-from sim_metadata import MatchingAlgo
+from sim_metadata import MatchingAlgo, Dataset
 import itertools
 import numpy as np
 import pandas as pd
@@ -34,7 +34,7 @@ curr_date_and_time = today.strftime("%b_%d_%Y_%H_%M_%S")
 top_level_dir = os.path.join("simulation_results/sweep_folder", curr_date_and_time)
 
 for j in range(0, len(Z["sim_duration"])):
-    kpi = run_simulation(sim_duration=Z["sim_duration"][j],
+    kpi = run_simulation(sim_duration_min=Z["sim_duration"][j],
                          n_cars=Z["n_cars"][j],
                          arrival_rate_pmin=Z["arrival_rate_pmin"][j],
                          n_chargers=Z["n_chargers"][j],
@@ -43,6 +43,8 @@ for j in range(0, len(Z["sim_duration"])):
                          matching_algo=MatchingAlgo.POWER_OF_D_IDLE.value,
                          d=2,
                          infinite_chargers=Z["infinite_chargers"][j],
+                         dataset_source=Dataset.RANDOMLYGENERATED.value,
+                         start_datetime=datetime(2024, 1, 1, 0, 0, 0),
                          results_folder=top_level_dir)
     # Append kpi to consolidate_kpi dataframe
     if consolidated_kpi is None:
