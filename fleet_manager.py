@@ -531,17 +531,31 @@ class FleetManager:
             raise ValueError(f"Matching algorithm {self.matching_algo} does not exist")
 
     def closest_available_charger(self, car, list_available_chargers):
-        if len(list_available_chargers["lat"]) <= 1:
+        n_avail = len(list_available_chargers["lat"])
+        if n_avail == 0:
             return None, None
+
+        if n_avail == 1:
+            charger_idx = list_available_chargers.index[0]
+            distance = calc_dist_between_two_points(
+                start_lat=car.lat,
+                start_lon=car.lon,
+                end_lat=list_available_chargers["lat"].iloc[0],
+                end_lon=list_available_chargers["lon"].iloc[0],
+                dist_correction_factor=self.dist_correction_factor,
+                dist_func=self.dist_func,
+            )
+            return charger_idx, float(distance)
+
         dist_to_supercharger = calc_dist_between_two_points(
             start_lat=car.lat,
             start_lon=car.lon,
             end_lat=list_available_chargers["lat"],
             end_lon=list_available_chargers["lon"],
             dist_correction_factor=self.dist_correction_factor,
-            dist_func=self.dist_func
+            dist_func=self.dist_func,
         )
-        argmin_idx = np.argmin(dist_to_supercharger)
-        min_dist_to_charger = min(dist_to_supercharger)
+        argmin_idx = int(np.argmin(dist_to_supercharger))
+        min_dist_to_charger = float(np.min(dist_to_supercharger))
         closest_charger_idx = list_available_chargers.index[argmin_idx]
         return closest_charger_idx, min_dist_to_charger
