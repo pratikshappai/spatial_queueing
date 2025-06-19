@@ -34,9 +34,11 @@ class Trip(object):
         yield self.env.timeout(renege_time_min)
 
         if self.state == TripState.WAITING.value:
-            self.state = TripState.RENEGED
+            self.state = TripState.RENEGED.value
             if not SimMetaData.quiet_sim:
-                print(f"Trip {self.trip_id} reneged after waiting for {renege_time_min} time")
+                print(
+                    f"Trip {self.trip_id} reneged after waiting for {renege_time_min} time"
+                )
 
     def to_dict(self):
         return {

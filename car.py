@@ -284,24 +284,17 @@ if __name__ == "__main__":
     env = simpy.Environment()
     n_chargers = SimMetaData.n_charger_loc
     n_posts = SimMetaData.n_posts
-    # Initialize all the supercharging stations
-    list_chargers = []
-    for charger_idx in range(n_chargers):
-        charger = SuperCharger(idx=charger_idx,
-                               n_posts=n_posts)
-        list_chargers.append(charger)
+    list_chargers = [SuperCharger(idx=i, n_posts=n_posts) for i in range(n_chargers)]
 
-    car = Car(car_id=0,
-              lat=0,
-              lon=1,
-              env=env,
-              list_chargers=list_chargers,
-              df_arrival_sequence=None  # Update this if you want to test this file separately
-              )
-    try:
-        car.prev_charging_process = env.process(car.run_charge(1, 1))
-    except simpy.Interrupt:
-        print("interrupted")
+    car = Car(
+        car_id=0,
+        lat=0,
+        lon=1,
+        env=env,
+        list_chargers=list_chargers,
+        df_arrival_sequence=None,
+    )
+
     trip = Trip(env, 0, 1, TripState.WAITING.value)
     env.process(car.run_trip(trip, 1, DistFunc.MANHATTAN.value))
     env.run()

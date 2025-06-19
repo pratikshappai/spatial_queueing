@@ -21,10 +21,18 @@ def optimization(avg_trip_pickup_time_min, avg_driving_to_charger_time_min):
     # n_trips: num arrivals at time t = num trips arrive between t and t + 1
     n_trips = []
     time_list = []
-    df_trips = pd.read_csv(
-        "/Users/chenzhang/Desktop/Georgia Tech/Research/spatial_queueing/spatial_queueing/spatial_queueing/sampledata.csv")
+    data_dir = os.path.dirname(__file__)
+    df_trips = pd.read_csv(os.path.join(data_dir, "sampledata.csv"))
+    df_trips["pickup_datetime"] = pd.to_datetime(df_trips["pickup_datetime"])
+    df_trips["dropoff_datetime"] = pd.to_datetime(df_trips["dropoff_datetime"])
     df_demand_curve = pd.read_csv(
-        "/Users/chenzhang/Desktop/Georgia Tech/Research/spatial_queueing/simulation_results/Apr_11_2024_20_57_20 - closest available, charge idle, send only idle=False [5-day]/demand_curve/fleet_demand_curve.csv")
+        os.path.join(
+            data_dir,
+            "simulation_results",
+            "demand_curve",
+            "fleet_demand_curve.csv",
+        )
+    )
     if not os.path.isfile("optimization_data.csv"):
         # n_trips = np.ones(sim_duration) * 200
         # df_trips = pd.read_csv(
@@ -39,7 +47,6 @@ def optimization(avg_trip_pickup_time_min, avg_driving_to_charger_time_min):
         for t in range(0, sim_duration):
             start_datetime = datetime(2010, 12, 1, int(t / 60), t % 60, 0)
             end_datetime = datetime(2010, 12, 1, int((t + 1) / 60), (t + 1) % 60, 0)
-            df_trips.loc[:, "pickup_datetime"] = pd.to_datetime(df_trips['pickup_datetime'], format='%Y-%m-%d %H:%M:%S')
             num_trips_at_time_t = len(df_trips[(df_trips["pickup_datetime"] >= start_datetime) &
                                                (df_trips["pickup_datetime"] < end_datetime)])
             trip_time_min_sum = sum(df_trips[(df_trips["pickup_datetime"] >= start_datetime) &
@@ -48,19 +55,15 @@ def optimization(avg_trip_pickup_time_min, avg_driving_to_charger_time_min):
         for t in range(0, sim_duration):
             start_datetime = datetime(2010, 12, 1, int(t / 60), t % 60, 0)
             end_datetime = datetime(2010, 12, 1, int((t + 1) / 60), (t + 1) % 60, 0)
-            df_trips.loc[:, "pickup_datetime"] = pd.to_datetime(df_trips['pickup_datetime'],
-                                                                format='%Y-%m-%d %H:%M:%S')
             n_trips.append(len(df_trips[(df_trips["pickup_datetime"] >= start_datetime) &
                                         (df_trips["pickup_datetime"] < end_datetime)]))
             time_list.append(t)
         df_n_trips_and_avg_trip_time = pd.DataFrame({'Time (min)': time_list,
                                                      'Number of Trips': n_trips,
                                                      'Average Trip Time (min)': avg_trip_time_min_list})
-        df_n_trips_and_avg_trip_time.to_csv(
-            "/Users/chenzhang/Desktop/Georgia Tech/Research/spatial_queueing/spatial_queueing/optimization_data.csv")
+        df_n_trips_and_avg_trip_time.to_csv(os.path.join(data_dir, "optimization_data.csv"))
     else:
-        df_n_trips_and_avg_trip_time = pd.read_csv(
-            "/Users/chenzhang/Desktop/Georgia Tech/Research/spatial_queueing/spatial_queueing/optimization_data.csv")
+        df_n_trips_and_avg_trip_time = pd.read_csv(os.path.join(data_dir, "optimization_data.csv"))
         time_list = df_n_trips_and_avg_trip_time['Time (min)'].to_list()
         n_trips = df_n_trips_and_avg_trip_time['Number of Trips'].to_list()
         avg_trip_time_min_list = df_n_trips_and_avg_trip_time['Average Trip Time (min)'].to_list()
