@@ -246,8 +246,8 @@ class DataInput:
 
                 # adding a random amount of minutes as pickups are rounded off to the nearest 15 mins in the dataset
                 df_filtered.loc[:, "pickup_datetime"] += pd.to_timedelta(
-                    np.random.randint(0, 15 * 60, len(df_filtered)), unit="m"
-                ) / 60
+                    np.random.randint(0, 15, len(df_filtered)), unit="m"
+                )
 
                 df_filtered.loc[:, "dropoff_datetime"] = (
                         df_filtered.loc[:, "pickup_datetime"]
