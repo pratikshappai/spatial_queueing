@@ -287,8 +287,12 @@ if __name__ == "__main__":
     # Initialize all the supercharging stations
     list_chargers = []
     for charger_idx in range(n_chargers):
-        charger = SuperCharger(idx=charger_idx,
-                               n_posts=n_posts)
+        charger = SuperCharger(
+            idx=charger_idx,
+            n_posts=n_posts,
+            env=env,
+            df_arrival_sequence=None,
+        )
         list_chargers.append(charger)
 
     car = Car(car_id=0,
@@ -299,7 +303,7 @@ if __name__ == "__main__":
               df_arrival_sequence=None  # Update this if you want to test this file separately
               )
     try:
-        car.prev_charging_process = env.process(car.run_charge(1, 1))
+        car.prev_charging_process = env.process(car.car_charging(0, 1))
     except simpy.Interrupt:
         print("interrupted")
     trip = Trip(env, 0, 1, TripState.WAITING.value)
